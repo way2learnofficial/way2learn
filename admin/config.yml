@@ -7,11 +7,11 @@ media_folder: "assets/images"
 public_folder: "/assets/images"
 
 collections:
-  - name: "database"
-    label: "Data Files"
+  - name: "blog_collection"
+    label: "Blog Articles"
     files:
       - name: "blog"
-        label: "Blog Articles"
+        label: "Blog Articles Editor"
         file: "blog-data.json"
         fields:
           - name: "articles"
@@ -37,8 +37,11 @@ collections:
               - { label: "SEO Robots Tag", name: "robotsMeta", widget: "select", default: "index, follow", options: ["index, follow", "noindex, follow", "noindex, nofollow"], description: "Tell search bots how to crawl this article." }
               - { label: "SEO Canonical URL (Optional)", name: "canonicalUrl", widget: "string", required: false, description: "Preferred URL version to avoid duplicate content penalties." }
 
+  - name: "settings_collection"
+    label: "Global Settings"
+    files:
       - name: "settings"
-        label: "Global Settings"
+        label: "Global Settings Editor"
         file: "settings.json"
         fields:
           - { label: "Website SEO Title", name: "siteTitle", widget: "string", description: "Main tab title of the homepage." }

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://way2learnofficial.github.io/way2learn/sitemap.xml

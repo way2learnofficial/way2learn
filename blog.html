@@ -247,8 +247,12 @@
       card.style.flexDirection = 'column';
       card.style.cursor = 'pointer';
       card.innerHTML = `
-        <div class="topic-icon" style="background: ${article.coverGradient}; color: white; display: grid; place-items: center; border-radius: var(--radius-md); font-weight: bold; font-size: 1.2rem; width: 56px; height: 56px; margin-bottom: 18px;">
-          ${article.category === 'seo' ? 'SEO' : article.category === 'social' ? '2026' : '₹'}
+        <div class="card-cover" style="height: 180px; background: ${article.coverImage ? `url(${article.coverImage}) center/cover no-repeat` : article.coverGradient}; border-radius: var(--radius-md) var(--radius-md) 0 0; margin: -32px -24px 20px -24px; position: relative; overflow: hidden;">
+          ${!article.coverImage ? `
+            <div style="position: absolute; inset: 0; display: grid; place-items: center; color: white; font-weight: 800; font-size: 2rem; font-family: 'Poppins', sans-serif;">
+              ${article.category === 'seo' ? 'SEO' : article.category === 'social' ? '2026' : '₹'}
+            </div>
+          ` : ''}
         </div>
         <span class="topic-tag" style="margin-bottom: 12px; display: inline-block;">${article.categoryLabel}</span>
         <h3 style="font-size: 1.25rem; line-height: 1.4; margin-bottom: 10px; color: var(--dark);">

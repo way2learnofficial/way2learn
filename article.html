@@ -11,6 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link rel="stylesheet" href="style.css" />
+<!-- Markdown Parser for Sveltia Rich Text content -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -278,11 +280,11 @@
         document.getElementById('breadcrumbTitle').textContent = article.title;
         document.getElementById('articleTitle').textContent = article.title;
         document.getElementById('articleCategory').textContent = article.categoryLabel;
-        document.getElementById('articleCover').style.background = article.coverGradient;
+        document.getElementById('articleCover').style.background = article.coverImage ? `url(${article.coverImage}) center/cover no-repeat` : article.coverGradient;
         document.getElementById('articleAuthorName').textContent = article.author;
         document.getElementById('articleDate').textContent = article.date;
         document.getElementById('articleReadTime').textContent = article.readTime;
-        document.getElementById('articleBody').innerHTML = article.content;
+        document.getElementById('articleBody').innerHTML = typeof marked !== 'undefined' ? marked.parse(article.content) : article.content;
 
         // Sidebar Author Details
         document.getElementById('sidebarAuthor').textContent = article.author;
@@ -323,8 +325,12 @@
           card.style.flexDirection = 'column';
           card.style.cursor = 'pointer';
           card.innerHTML = `
-            <div class="topic-icon" style="background: ${rel.coverGradient}; color: white; display: grid; place-items: center; border-radius: var(--radius-md); font-weight: bold; font-size: 1.2rem; width: 56px; height: 56px; margin-bottom: 18px;">
-              ${rel.category === 'seo' ? 'SEO' : rel.category === 'social' ? '2026' : '₹'}
+            <div class="card-cover" style="height: 140px; background: ${rel.coverImage ? `url(${rel.coverImage}) center/cover no-repeat` : rel.coverGradient}; border-radius: var(--radius-md) var(--radius-md) 0 0; margin: -32px -24px 20px -24px; position: relative; overflow: hidden;">
+              ${!rel.coverImage ? `
+                <div style="position: absolute; inset: 0; display: grid; place-items: center; color: white; font-weight: 800; font-size: 1.8rem; font-family: 'Poppins', sans-serif;">
+                  ${rel.category === 'seo' ? 'SEO' : rel.category === 'social' ? '2026' : '₹'}
+                </div>
+              ` : ''}
             </div>
             <span class="topic-tag" style="margin-bottom: 12px; display: inline-block;">${rel.categoryLabel}</span>
             <h3 style="font-size: 1.2rem; line-height: 1.4; margin-bottom: 10px; color: var(--dark);">

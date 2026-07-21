@@ -30,4 +30,5 @@ collections:
               - { label: "Publication Date", name: "date", widget: "string", description: "e.g. July 20, 2026" }
               - { label: "Tags", name: "tags", widget: "list", field: {label: "Tag", name: "tag", widget: "string"} }
               - { label: "Cover Gradient Style", name: "coverGradient", widget: "string", default: "linear-gradient(135deg, #0A62AE 0%, #21A2DB 100%)", description: "CSS linear-gradient syntax" }
-              - { label: "Body Content (HTML)", name: "content", widget: "text", description: "Write standard HTML tags like <p>, <h3>, <ul>, etc." }
+              - { label: "Featured Cover Image", name: "coverImage", widget: "image", required: false, description: "Upload a cover image for the article card (replaces gradient if uploaded)" }
+              - { label: "Body Content (Markdown/Rich-Text)", name: "content", widget: "markdown", description: "Write details, format text, and insert images from the media library." }

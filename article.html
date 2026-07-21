@@ -270,10 +270,35 @@
         }
 
         // Populate Page Meta Title & Description for SEO
-        document.title = `${article.title} | Way2Learn Blog`;
+        const pageTitle = article.seoTitle || article.title;
+        document.title = `${pageTitle} | Way2Learn Blog`;
+        
+        const pageDesc = article.seoDescription || article.description;
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
-          metaDescription.setAttribute('content', article.description);
+          metaDescription.setAttribute('content', pageDesc);
+        }
+
+        // Populate Page Robots Meta
+        let metaRobots = document.querySelector('meta[name="robots"]');
+        if (!metaRobots) {
+          metaRobots = document.createElement('meta');
+          metaRobots.name = 'robots';
+          document.head.appendChild(metaRobots);
+        }
+        metaRobots.setAttribute('content', article.robotsMeta || 'index, follow');
+
+        // Populate Canonical URL link
+        let linkCanonical = document.querySelector('link[rel="canonical"]');
+        if (article.canonicalUrl) {
+          if (!linkCanonical) {
+            linkCanonical = document.createElement('link');
+            linkCanonical.rel = 'canonical';
+            document.head.appendChild(linkCanonical);
+          }
+          linkCanonical.setAttribute('href', article.canonicalUrl);
+        } else if (linkCanonical) {
+          linkCanonical.remove();
         }
 
         // Populate Content

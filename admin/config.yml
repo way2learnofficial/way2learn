@@ -32,3 +32,16 @@ collections:
               - { label: "Cover Gradient Style", name: "coverGradient", widget: "string", default: "linear-gradient(135deg, #0A62AE 0%, #21A2DB 100%)", description: "CSS linear-gradient syntax" }
               - { label: "Featured Cover Image", name: "coverImage", widget: "image", required: false, description: "Upload a cover image for the article card (replaces gradient if uploaded)" }
               - { label: "Body Content (Markdown/Rich-Text)", name: "content", widget: "markdown", description: "Write details, format text, and insert images from the media library." }
+              - { label: "SEO Tab Title Override (Optional)", name: "seoTitle", widget: "string", required: false, description: "Custom browser tab title. Defaults to Article Title." }
+              - { label: "SEO Meta Description Override (Optional)", name: "seoDescription", widget: "text", required: false, description: "Custom search engine snippet. Defaults to Card Description." }
+              - { label: "SEO Robots Tag", name: "robotsMeta", widget: "select", default: "index, follow", options: ["index, follow", "noindex, follow", "noindex, nofollow"], description: "Tell search bots how to crawl this article." }
+              - { label: "SEO Canonical URL (Optional)", name: "canonicalUrl", widget: "string", required: false, description: "Preferred URL version to avoid duplicate content penalties." }
+
+      - name: "settings"
+        label: "Global Settings"
+        file: "settings.json"
+        fields:
+          - { label: "Website SEO Title", name: "siteTitle", widget: "string", description: "Main tab title of the homepage." }
+          - { label: "Website Meta Description", name: "siteDescription", widget: "text", description: "Main snippet shown on Google for the website search result." }
+          - { label: "Website SEO Keywords", name: "siteKeywords", widget: "string", description: "Comma-separated keywords for site discovery." }
+          - { label: "Default Content Author", name: "author", widget: "string", description: "Default company/author name." }

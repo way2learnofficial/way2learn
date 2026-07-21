@@ -153,3 +153,31 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   });
 });
+
+// Load Global SEO Settings dynamically
+(function() {
+  fetch('settings.json')
+    .then(response => {
+      if (!response.ok) throw new Error('Settings load failed');
+      return response.json();
+    })
+    .then(settings => {
+      if (settings.siteTitle) document.title = settings.siteTitle;
+      
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription && settings.siteDescription) {
+        metaDescription.setAttribute('content', settings.siteDescription);
+      }
+      
+      let metaKeywords = document.querySelector('meta[name="keywords"]');
+      if (!metaKeywords && settings.siteKeywords) {
+        metaKeywords = document.createElement('meta');
+        metaKeywords.name = 'keywords';
+        document.head.appendChild(metaKeywords);
+      }
+      if (metaKeywords && settings.siteKeywords) {
+        metaKeywords.setAttribute('content', settings.siteKeywords);
+      }
+    })
+    .catch(error => console.warn('Could not load global SEO settings:', error));
+})();

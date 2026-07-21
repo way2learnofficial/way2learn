@@ -11,7 +11,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link rel="stylesheet" href="style.css" />
-<script src="blog-data.js"></script>
 </head>
 <body>
 
@@ -244,11 +243,6 @@
     const loadingArea = document.getElementById('loadingArea');
     const container = document.getElementById('articleContainer');
 
-    if (typeof BLOG_ARTICLES === 'undefined') {
-      showErrorPage('Blog Database failed to load');
-      return;
-    }
-
     // Get article ID from URL ?id=slug-name
     const urlParams = new URLSearchParams(window.location.search);
     const articleId = urlParams.get('id');
@@ -258,94 +252,113 @@
       return;
     }
 
-    // Find article
-    const article = BLOG_ARTICLES.find(a => a.id === articleId);
+    // Fetch database and find article
+    fetch('blog-data.json')
+      .then(response => {
+        if (!response.ok) throw new Error('Database load failed');
+        return response.json();
+      })
+      .then(data => {
+        const blogArticles = data.articles || [];
+        const article = blogArticles.find(a => a.id === articleId);
 
-    if (!article) {
-      showErrorPage('Article Not Found');
-      return;
-    }
+        if (!article) {
+          showErrorPage('Article Not Found');
+          return;
+        }
 
-    // Populate Page Meta Title & Description for SEO
-    document.title = `${article.title} | Way2Learn Blog`;
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', article.description);
-    }
+        // Populate Page Meta Title & Description for SEO
+        document.title = `${article.title} | Way2Learn Blog`;
+        const metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription) {
+          metaDescription.setAttribute('content', article.description);
+        }
 
-    // Populate Content
-    document.getElementById('breadcrumbTitle').textContent = article.title;
-    document.getElementById('articleTitle').textContent = article.title;
-    document.getElementById('articleCategory').textContent = article.categoryLabel;
-    document.getElementById('articleCover').style.background = article.coverGradient;
-    document.getElementById('articleAuthorName').textContent = article.author;
-    document.getElementById('articleDate').textContent = article.date;
-    document.getElementById('articleReadTime').textContent = article.readTime;
-    document.getElementById('articleBody').innerHTML = article.content;
+        // Populate Content
+        document.getElementById('breadcrumbTitle').textContent = article.title;
+        document.getElementById('articleTitle').textContent = article.title;
+        document.getElementById('articleCategory').textContent = article.categoryLabel;
+        document.getElementById('articleCover').style.background = article.coverGradient;
+        document.getElementById('articleAuthorName').textContent = article.author;
+        document.getElementById('articleDate').textContent = article.date;
+        document.getElementById('articleReadTime').textContent = article.readTime;
+        document.getElementById('articleBody').innerHTML = article.content;
 
-    // Sidebar Author Details
-    document.getElementById('sidebarAuthor').textContent = article.author;
-    document.getElementById('sidebarAuthorRole').textContent = article.authorRole;
-    document.getElementById('authorAvatar').textContent = article.author.charAt(0);
+        // Sidebar Author Details
+        document.getElementById('sidebarAuthor').textContent = article.author;
+        document.getElementById('sidebarAuthorRole').textContent = article.authorRole;
+        document.getElementById('authorAvatar').textContent = article.author.charAt(0);
 
-    // Tags
-    const tagsWrapper = document.getElementById('articleTags');
-    tagsWrapper.innerHTML = '';
-    article.tags.forEach(tag => {
-      const tagSpan = document.createElement('span');
-      tagSpan.className = 'topic-tag';
-      tagSpan.style.background = '#E2E8F0';
-      tagSpan.style.color = 'var(--text)';
-      tagSpan.textContent = `#${tag}`;
-      tagsWrapper.appendChild(tagSpan);
-    });
+        // Tags
+        const tagsWrapper = document.getElementById('articleTags');
+        tagsWrapper.innerHTML = '';
+        article.tags.forEach(tag => {
+          const tagSpan = document.createElement('span');
+          tagSpan.className = 'topic-tag';
+          tagSpan.style.background = '#E2E8F0';
+          tagSpan.style.color = 'var(--text)';
+          tagSpan.textContent = `#${tag}`;
+          tagsWrapper.appendChild(tagSpan);
+        });
 
-    // Populate Share Links
-    const currentUrl = window.location.href;
-    let shareLinks = { whatsapp: '#', facebook: '#', twitter: '#', linkedin: '#' };
-    if (typeof getShareLinks !== 'undefined') {
-      shareLinks = getShareLinks(currentUrl, article.title);
-    }
-    document.getElementById('shareWA').href = shareLinks.whatsapp;
-    document.getElementById('shareFB').href = shareLinks.facebook;
-    document.getElementById('shareTW').href = shareLinks.twitter;
-    document.getElementById('shareLN').href = shareLinks.linkedin;
+        // Populate Share Links
+        const currentUrl = window.location.href;
+        const shareLinks = getShareLinks(currentUrl, article.title);
+        document.getElementById('shareWA').href = shareLinks.whatsapp;
+        document.getElementById('shareFB').href = shareLinks.facebook;
+        document.getElementById('shareTW').href = shareLinks.twitter;
+        document.getElementById('shareLN').href = shareLinks.linkedin;
 
-    // Populate Related Articles
-    const relatedGrid = document.getElementById('relatedGrid');
-    relatedGrid.innerHTML = '';
-    
-    // Filter out current article
-    const related = BLOG_ARTICLES.filter(a => a.id !== article.id).slice(0, 3);
-    related.forEach(rel => {
-      const card = document.createElement('a');
-      card.href = `article.html?id=${rel.id}`;
-      card.className = 'topic-card fade-up visible';
-      card.style.display = 'flex';
-      card.style.flexDirection = 'column';
-      card.style.cursor = 'pointer';
-      card.innerHTML = `
-        <div class="topic-icon" style="background: ${rel.coverGradient}; color: white; display: grid; place-items: center; border-radius: var(--radius-md); font-weight: bold; font-size: 1.2rem; width: 56px; height: 56px; margin-bottom: 18px;">
-          ${rel.category === 'seo' ? 'SEO' : rel.category === 'social' ? '2026' : '₹'}
-        </div>
-        <span class="topic-tag" style="margin-bottom: 12px; display: inline-block;">${rel.categoryLabel}</span>
-        <h3 style="font-size: 1.2rem; line-height: 1.4; margin-bottom: 10px; color: var(--dark);">
-          ${rel.title}
-        </h3>
-        <p style="font-size: 0.88rem; color: var(--text-light); margin-bottom: 20px; line-height: 1.6;">${rel.description}</p>
-        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 12px; margin-top: auto;">
-          <span>By ${rel.author}</span>
-          <span>${rel.readTime}</span>
-        </div>
-      `;
-      relatedGrid.appendChild(card);
-    });
+        // Populate Related Articles
+        const relatedGrid = document.getElementById('relatedGrid');
+        relatedGrid.innerHTML = '';
+        
+        // Filter out current article
+        const related = blogArticles.filter(a => a.id !== article.id).slice(0, 3);
+        related.forEach(rel => {
+          const card = document.createElement('a');
+          card.href = `article.html?id=${rel.id}`;
+          card.className = 'topic-card fade-up visible';
+          card.style.display = 'flex';
+          card.style.flexDirection = 'column';
+          card.style.cursor = 'pointer';
+          card.innerHTML = `
+            <div class="topic-icon" style="background: ${rel.coverGradient}; color: white; display: grid; place-items: center; border-radius: var(--radius-md); font-weight: bold; font-size: 1.2rem; width: 56px; height: 56px; margin-bottom: 18px;">
+              ${rel.category === 'seo' ? 'SEO' : rel.category === 'social' ? '2026' : '₹'}
+            </div>
+            <span class="topic-tag" style="margin-bottom: 12px; display: inline-block;">${rel.categoryLabel}</span>
+            <h3 style="font-size: 1.2rem; line-height: 1.4; margin-bottom: 10px; color: var(--dark);">
+              ${rel.title}
+            </h3>
+            <p style="font-size: 0.88rem; color: var(--text-light); margin-bottom: 20px; line-height: 1.6;">${rel.description}</p>
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 12px; margin-top: auto;">
+              <span>By ${rel.author}</span>
+              <span>${rel.readTime}</span>
+            </div>
+          `;
+          relatedGrid.appendChild(card);
+        });
 
-    // Toggle Visibility
-    loadingArea.style.display = 'none';
-    container.style.display = 'block';
-
+        // Toggle Visibility
+        loadingArea.style.display = 'none';
+        container.style.display = 'block';
+      })
+      .catch(error => {
+        console.error('Error loading database:', error);
+        showErrorPage('Blog Database failed to load');
+      });
   })();
+
+  function getShareLinks(url, title) {
+    const encodedUrl = encodeURIComponent(url);
+    const encodedTitle = encodeURIComponent(title);
+    return {
+      whatsapp: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+      twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
+    };
+  }
 
   function showErrorPage(message) {
     const loadingArea = document.getElementById('loadingArea');

@@ -318,15 +318,19 @@
     // Filter out current article
     const related = BLOG_ARTICLES.filter(a => a.id !== article.id).slice(0, 3);
     related.forEach(rel => {
-      const card = document.createElement('div');
+      const card = document.createElement('a');
+      card.href = `article.html?id=${rel.id}`;
       card.className = 'topic-card fade-up visible';
+      card.style.display = 'flex';
+      card.style.flexDirection = 'column';
+      card.style.cursor = 'pointer';
       card.innerHTML = `
         <div class="topic-icon" style="background: ${rel.coverGradient}; color: white; display: grid; place-items: center; border-radius: var(--radius-md); font-weight: bold; font-size: 1.2rem; width: 56px; height: 56px; margin-bottom: 18px;">
           ${rel.category === 'seo' ? 'SEO' : rel.category === 'social' ? '2026' : '₹'}
         </div>
         <span class="topic-tag" style="margin-bottom: 12px; display: inline-block;">${rel.categoryLabel}</span>
-        <h3 style="font-size: 1.2rem; line-height: 1.4; margin-bottom: 10px;">
-          <a href="article.html?id=${rel.id}">${rel.title}</a>
+        <h3 style="font-size: 1.2rem; line-height: 1.4; margin-bottom: 10px; color: var(--dark);">
+          ${rel.title}
         </h3>
         <p style="font-size: 0.88rem; color: var(--text-light); margin-bottom: 20px; line-height: 1.6;">${rel.description}</p>
         <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 12px; margin-top: auto;">

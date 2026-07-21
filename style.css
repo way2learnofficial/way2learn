@@ -1317,3 +1317,90 @@ footer::before {
   .testimonial-card { padding: 24px; }
   .hero { padding: 60px 0 72px; }
 }
+
+/* Blog & Article Extensions */
+.category-filter {
+  background: var(--white);
+  color: var(--text-light);
+  border: 1.5px solid var(--border);
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: 'Poppins', sans-serif;
+}
+.category-filter:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.02);
+}
+.category-filter.active {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+}
+.blog-search-wrapper input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.08);
+}
+.active-nav {
+  color: var(--primary) !important;
+  background: rgba(var(--primary-rgb), 0.06) !important;
+}
+
+/* Article Page Typography Styles */
+.article-content h2, .article-content h3, .article-content h4 {
+  color: var(--dark);
+  margin-top: 32px;
+  margin-bottom: 14px;
+}
+.article-content h2 { font-size: 1.75rem; }
+.article-content h3 { font-size: 1.4rem; }
+.article-content p {
+  margin-bottom: 20px;
+  color: #334155;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+.article-content p.lead {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  line-height: 1.8;
+  font-weight: 500;
+  margin-bottom: 28px;
+}
+.article-content ul, .article-content ol {
+  margin-bottom: 24px;
+  padding-left: 24px;
+}
+.article-content li {
+  margin-bottom: 8px;
+  color: #334155;
+}
+.article-content li strong {
+  color: var(--dark);
+}
+.article-content code {
+  background: #F1F5F9;
+  color: #E11D48;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+.blog-quote {
+  border-left: 4px solid var(--accent);
+  background: rgba(var(--accent-rgb), 0.05);
+  padding: 24px;
+  margin: 32px 0;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: italic;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--dark);
+  line-height: 1.6;
+}
+
